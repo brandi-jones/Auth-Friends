@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
+import {axiosWithAuth} from '../utils/axiosWithAuth';
 
 const Login = (props) => {
 
@@ -13,7 +14,16 @@ const Login = (props) => {
         event.preventDefault();
 
         //make a POST request and send creentials object to the api
-        
+        axiosWithAuth()
+        .post('/api/login', state.credentials)
+        .then(response => {
+            console.log(response)
+            window.localStorage.setItem('token', response.data.payload)
+            props.history.push('./friends-list');
+        })
+        .catch(error => {
+            console.log("Error making POST request to API", error);
+        })
     }
 
     const handleChanges = event => {
